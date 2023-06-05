@@ -21,6 +21,8 @@
 @import url('./../blocks/card/__info/card__info.css');
 @import url('./../blocks/card/__image/card__image.css');
 
+@import url('../blocks/footer/footer.css');
+
 * {
     outline: solid red 1px;
 }
