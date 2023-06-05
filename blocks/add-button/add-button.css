@@ -1,0 +1,19 @@
+.add-button {
+    width: 150px;
+    height: 50px;
+    background-image: url(../../images/Add\ Button.svg);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+    align-self: center;
+}
+
+@media screen and (max-width:768px) {
+    .add-button {
+        width: 282px;
+        background-image: url(../../images/Add\ Button\ 320.png);
+        border-radius: 2px;
+        margin-left: 0;
+    }
+}

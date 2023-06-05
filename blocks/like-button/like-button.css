@@ -1,0 +1,10 @@
+.like-button {
+    background-image: url(../../images/like.svg);
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 19px;
+    background-color: transparent;
+    border: none;
+    padding-right: 36px;
+    margin-left: 10px;
+}
