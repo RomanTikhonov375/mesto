@@ -1,0 +1,9 @@
+.card__info {
+    display: flex;
+    background-color: #fff;
+    height: auto;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px;
+    border-radius: 0 0 10px 10px;
+}

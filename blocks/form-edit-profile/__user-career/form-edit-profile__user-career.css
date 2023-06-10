@@ -1,0 +1,18 @@
+.form-edit-profile__user-career {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 0 5px 13px 0 ;
+    border: 0;
+    border-bottom: 1px solid rgba(84, 84, 84, 0.2);
+    width: 358px;
+    margin: 0 auto 44px;
+    outline: none;
+}
+
+@media screen and (max-width:540px) {
+    .form-edit-profile__user-career {
+       width: 238px;
+    }
+}
