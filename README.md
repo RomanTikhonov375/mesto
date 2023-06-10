@@ -8,7 +8,7 @@
 * Flexbox
 * JS работа с DOM, переменными и массивами
 
-https://romantikhonov375.github.io/russian-travel/
+https://romantikhonov375.github.io/mesto/
 
 
 *Планируется добавление функциональности добавления карочек, смены аватара, подсчёта лайков*
