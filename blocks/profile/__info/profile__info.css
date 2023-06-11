@@ -5,11 +5,13 @@
     margin-top: 12px;
 }
 
-@media screen and (max-width:900px) {
+@media screen and (max-width:940px) {
     .profile__info {
         min-width: 282px;
         padding-top: 12px;
         margin-left: 0;
         margin-bottom: 27px;
+        justify-content: center;
+        margin-right: 25px;
     }
 }

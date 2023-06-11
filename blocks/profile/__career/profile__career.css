@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-@media screen and (max-width:900px) {
+@media screen and (max-width:940px) {
     .profile__career {
         font-size: 14px;
         line-height: 17px;

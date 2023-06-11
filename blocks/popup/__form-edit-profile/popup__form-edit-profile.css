@@ -1,5 +1,5 @@
-.card {
+.popup__form-edit-profile {
     display: flex;
     flex-direction: column;
-    width: 100%;
+
 }

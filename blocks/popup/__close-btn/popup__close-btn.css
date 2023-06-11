@@ -1,4 +1,4 @@
-.form-edit-profile__close-btn {
+.popup__close-btn {
     width: 32px;
     height: 32px;
     background-image: url(../../../images/Close\ Icon.svg);
@@ -14,7 +14,7 @@
 }
 
 @media screen and (max-width:540px) {
-    .form-edit-profile__close-btn {
+    .popup__close-btn {
         background-size: cover;
         width: 20px;
         height: 20px;

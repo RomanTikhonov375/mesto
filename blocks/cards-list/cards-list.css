@@ -1,7 +1,7 @@
 .cards-list {
     max-width: 100%;
     display: grid;
-    gap: 17px;
+    gap: 18px;
     grid-template-columns: repeat(auto-fit, 281px);
     grid-template-rows: repeat(auto-fit, 360px);
     padding: 0;
@@ -13,13 +13,6 @@
     .cards-list {
         grid-template-columns: repeat(2, 281px);
         justify-content: space-around;
-    }
-    
-}
-
-@media screen and (max-width:840px) {
-    .cards-list {
-        grid-template-columns: 281px 281px;
     }
     
 }

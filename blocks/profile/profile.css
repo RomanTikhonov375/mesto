@@ -5,7 +5,7 @@
     display: flex;
 }
 
-@media screen and (max-width:900px) {
+@media screen and (max-width:940px) {
     .profile {
         max-width: 100%;
         padding-top: 41px;
