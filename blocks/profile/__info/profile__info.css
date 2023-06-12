@@ -1,7 +1,6 @@
 .profile__info {
     margin-left: 30px;
     align-self: center;
-    max-width: 336px;
     margin-top: 12px;
 }
 
@@ -9,9 +8,8 @@
     .profile__info {
         min-width: 282px;
         padding-top: 12px;
-        margin-left: 0;
-        margin-bottom: 27px;
+        margin: 0 19px 27px 19px;
         justify-content: center;
-        margin-right: 25px;
+       
     }
 }

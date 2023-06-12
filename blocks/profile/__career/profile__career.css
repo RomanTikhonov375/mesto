@@ -9,13 +9,15 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    max-width: 282px;
 }
 
 @media screen and (max-width:940px) {
     .profile__career {
+        
         font-size: 14px;
         line-height: 17px;
         text-align: center;
-        padding-top: 14px;
+        padding: 14px 19px 0 19px;
     }
 }
