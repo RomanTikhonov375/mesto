@@ -4,9 +4,9 @@ const closeButtons = page.querySelectorAll('.popup__close-btn');
 const popups = page.querySelectorAll('.popup');
 const formEditProfile = page.querySelector('.popup__form-edit-profile');
 const buttonAddCard = page.querySelector('.profile__add-button');
-const cardAddPopup = page.querySelector('.popup__addCard');
-const editProfilePopup = page.querySelector('.popup__editProfile');
-const imageCardPopup = page.querySelector('.popup__imageCard');
+const cardAddPopup = page.querySelector('.cardAdd-popup');
+const editProfilePopup = page.querySelector('.editProfile-popup');
+const imageCardPopup = page.querySelector('.imageCard-popup');
 
 // находим список 
 const cardsTemplate = document.querySelector('.cards-list-container').content; // добавляем template разметку

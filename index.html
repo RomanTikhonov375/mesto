@@ -33,7 +33,7 @@
                 <template class="cards-list-container">
                     <li class="card">
                         <button class="card__trash opacity" type="button"></button>
-                        <img src="" alt="" class="card__image">
+                        <img src="#" alt="" class="card__image">
                         <div class="card__info">
                             <h2 class="card__name"></h2>
                             <button class="card__like-button" type="button"></button>
@@ -42,7 +42,7 @@
                 </template>
             </ul>
         </section>
-        <div class="popup popup__editProfile">
+        <div class="popup editProfile-popup">
             <div class="popup__container">
                 <button class="popup__close-btn opacity" type="button"></button>
                 <h2 class="popup__heading">Редактировать профиль</h2>
@@ -55,7 +55,7 @@
                 </form>
             </div>
         </div>
-        <div class="popup popup__addCard">
+        <div class="popup cardAdd-popup">
             <div class="popup__container">
                 <button class="popup__close-btn opacity" type="button"></button>
                 <h2 class="popup__heading">Новое место</h2>
@@ -64,14 +64,14 @@
                         placeholder="Название">
                     <input type="text" class="popup__input popup__input_type_link" name="card_link"
                         placeholder="Ссылка на картинку">
-                    <button type="submit" class="popup__submit-btn popup__addCard-submit-btn">Создать</button>
+                    <button type="submit" class="popup__submit-btn cardAdd-popup-submit-btn">Создать</button>
                 </form>
             </div>
         </div>
-        <div class="popup popup__imageCard">
+        <div class="popup imageCard-popup">
             <div class="popup__card-img">
                 <button class="popup__close-btn opacity" type="button"></button>
-                <img class="popup__image" src="">
+                <img class="popup__image" src="#" alt="Всплывающая картинка">
                 <p class="popup__caption"></p>
             </div>
         </div>
