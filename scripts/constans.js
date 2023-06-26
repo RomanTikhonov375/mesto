@@ -13,7 +13,7 @@ const initialCards = [
         link: 'https://images.unsplash.com/photo-1628017023091-543c881a48f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx2aXN1YWwtc2VhcmNofDF8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=600&q=60'
     },
     {
-        name: 'Лисабон',
+        name: 'Лиссабон',
         link: 'https://images.unsplash.com/photo-1638547768492-705dbb90f0f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx2aXN1YWwtc2VhcmNofDZ8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=600&q=60'
     },
     {

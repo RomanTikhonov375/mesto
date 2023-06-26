@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesto</title>
     <link href="./pages/index.css" rel="stylesheet">
+    <script src="./scripts/constans.js" defer></script>
+    <script src="./scripts/index.js" defer></script>
 </head>
 
 <body class="page">
@@ -25,52 +27,52 @@
                 <p class="profile__career">Исследователь океана</p>
             </div>
 
-            <button class="profile__add-button opacity" type="button"></button>
+            <button class="profile__add-button opacity" type="button" aria-label="добавить карточку"></button>
         </section>
         <section class="cards" aria-label="Фото галерея">
 
             <ul class="cards-list">
                 <template class="cards-list-container">
                     <li class="card">
-                        <button class="card__trash opacity" type="button"></button>
-                        <img src="#" alt="" class="card__image">
+                        <button class="card__trash opacity" type="button" aria-label="удалить карточку"></button>
+                        <img src="#" alt="#" class="card__image">
                         <div class="card__info">
                             <h2 class="card__name"></h2>
-                            <button class="card__like-button" type="button"></button>
+                            <button class="card__like-button" type="button" aria-label="мне нравится"></button>
                         </div>
                     </li>
                 </template>
             </ul>
         </section>
-        <div class="popup editProfile-popup">
+        <div class="popup editProfile-popup popup_background-color-opacity_05">
             <div class="popup__container">
-                <button class="popup__close-btn opacity" type="button"></button>
+                <button class="popup__close-btn opacity" type="button" aria-label="закрыть окно"></button>
                 <h2 class="popup__heading">Редактировать профиль</h2>
                 <form action="#" class="popup__form-edit-profile" name="edit-profile">
                     <input type="text" class="popup__input popup__input_type_name" name="user-name"
-                        placeholder="Введите ваше имя">
+                        placeholder="Введите ваше имя" required>
                     <input type="text" class="popup__input popup__input_type_career" name="user-career"
-                        placeholder="Введите ваше призвание">
+                        placeholder="Введите ваше призвание" required>
                     <button type="submit" class="popup__submit-btn">Сохранить</button>
                 </form>
             </div>
         </div>
-        <div class="popup cardAdd-popup">
+        <div class="popup cardAdd-popup popup_background-color-opacity_05">
             <div class="popup__container">
-                <button class="popup__close-btn opacity" type="button"></button>
+                <button class="popup__close-btn opacity" type="button" aria-label="закрыть окно"></button>
                 <h2 class="popup__heading">Новое место</h2>
                 <form action="#" class="popup__form-edit-card" name="edit-card">
                     <input type="text" class="popup__input popup__input_type_place" name="card_place"
-                        placeholder="Название">
-                    <input type="text" class="popup__input popup__input_type_link" name="card_link"
-                        placeholder="Ссылка на картинку">
+                        placeholder="Название" required>
+                    <input type="url" class="popup__input popup__input_type_link" name="card_link"
+                        placeholder="Ссылка на картинку" required>
                     <button type="submit" class="popup__submit-btn cardAdd-popup-submit-btn">Создать</button>
                 </form>
             </div>
         </div>
-        <div class="popup imageCard-popup">
+        <div class="popup imageCard-popup popup_background-color-opacity_09">
             <div class="popup__card-img">
-                <button class="popup__close-btn opacity" type="button"></button>
+                <button class="popup__close-btn opacity" type="button" aria-label="закрыть окно"></button>
                 <img class="popup__image" src="#" alt="Всплывающая картинка">
                 <p class="popup__caption"></p>
             </div>
@@ -79,8 +81,6 @@
     <footer class="footer">
         <p class="footer__copyright">© 2023 Mesto Russia</p>
     </footer>
-    <script src="./scripts/constans.js"></script>
-    <script src="./scripts/index.js"></script>
 </body>
 
 </html>
