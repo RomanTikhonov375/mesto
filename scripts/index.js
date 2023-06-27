@@ -19,6 +19,7 @@ function createCard({ name, link }) {
     const cardImage = cardElement.querySelector('.card__image');
 
     cardImage.addEventListener('click', () => {
+        page.querySelector('.popup__image').alt = name; // Это была невнимательность:)
         page.querySelector('.popup__image').src = link;
         page.querySelector('.popup__caption').textContent = name;
         openPopup(imageCardPopup);
@@ -55,10 +56,8 @@ editButton.addEventListener('click', () => { openPopup(editProfilePopup); editPr
 
 // Функция закрытия попапов
 closeButtons.forEach((elem) => {
-    const currentPopup = page.closest('.popup');
-    elem.addEventListener('click', () => {
-        popups.forEach((currentPopup) => closePopup(currentPopup));
-    });
+    const buttonPopup = elem.closest('.popup');
+    elem.addEventListener('click', () => closePopup(buttonPopup)); // Спасибо за объяснение, не очень понял из прошлого комментария , как нужно реализовать, теперь понятно как это работает.
 });
 
 function closePopup(element) {
@@ -92,5 +91,3 @@ function createUserCard(evt) {
 };
 
 cardAddPopup.addEventListener('submit', createUserCard);
-
-// Не понял 6 пункт в ревью, про исправление let, в коде их нет. 
