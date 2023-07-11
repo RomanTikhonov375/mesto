@@ -7,6 +7,12 @@ const buttonAddCard = page.querySelector('.profile__add-button');
 const cardAddPopup = page.querySelector('.cardAdd-popup');
 const editProfilePopup = page.querySelector('.editProfile-popup');
 const imageCardPopup = page.querySelector('.imageCard-popup');
+const cardAddPopupImgHeadingInput = page.querySelector('.popup__input_type_place');
+const profileUserName = page.querySelector('.profile__user-name');
+const profileCareer = page.querySelector('.profile__career');
+const placeNameCardInput = page.querySelector('.popup__input_type_place');
+const imgCardInput = page.querySelector('.popup__input_type_link');
+const formEditCard =  page.querySelector('.popup__form-edit-card');
 
 // находим список 
 const cardsTemplate = document.querySelector('.cards-list-container').content; // добавляем template разметку
@@ -51,16 +57,25 @@ function openPopup(element) {
     element.classList.add('popup_opened');
     document.addEventListener('keydown', closePopupByKeyEsc);
     element.addEventListener('click', closePopupOnOverlayClick);
-    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
-    resetForm(CONFIG_FORM_VALIDATION);
 };
 
-buttonAddCard.addEventListener('click', () => openPopup(cardAddPopup));
-editButton.addEventListener('click', () => { openPopup(editProfilePopup); editProfileFormAddDefaultInputs() });
+buttonAddCard.addEventListener('click', () => { 
+    openPopup(cardAddPopup); 
+    resetForm(CONFIG_FORM_VALIDATION); 
+    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
+    focusOnIput(cardAddPopupImgHeadingInput);
+});
+
+editButton.addEventListener('click', () => { 
+     openPopup(editProfilePopup);
+     editProfileFormAddDefaultInputs();
+     deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
+    });
 
 //Функция определения открытого попапа
 function wichPopupIsOpened() {
-    return popup = Array.from(popups).find(item => item.classList.contains('popup_opened'));
+    return Array.from(popups).find(item => item.classList.contains('popup_opened'));
+    
 };
 
 // Функция закрытия попапов по крестику
@@ -71,7 +86,7 @@ closeButtons.forEach((elem) => {
 
 //Функция закрытия попапа по нажатию на Esc
 function closePopupByKeyEsc(evt) {
-    wichPopupIsOpened();
+    const popup = wichPopupIsOpened();
     if (evt.key === "Escape") {
         closePopup(popup);
     };
@@ -79,7 +94,7 @@ function closePopupByKeyEsc(evt) {
 
 //Фукнция закрытия попапа по оверлею
 function closePopupOnOverlayClick(evt) {
-    wichPopupIsOpened();
+    const popup = wichPopupIsOpened();
     if (evt.target === evt.currentTarget) {
         closePopup(popup);
     };
@@ -91,15 +106,12 @@ function closePopupOnOverlayClick(evt) {
 function closePopup(element) {
     element.classList.remove('popup_opened');
     document.removeEventListener('keydown', closePopupByKeyEsc);
-    element.removeEventListener('click', closePopupOnOverlayClick);
 
 };
 
 // Функция обработчик отправки формы
 function handleEditUserFormSubmit(evt) {
     evt.preventDefault();
-    const profileUserName = page.querySelector('.profile__user-name');
-    const profileCareer = page.querySelector('.profile__career');
     profileUserName.textContent = formEditProfile['user-name'].value;
     profileCareer.textContent = formEditProfile['user-career'].value;
     closePopup(editProfilePopup);
@@ -112,12 +124,10 @@ formEditProfile.addEventListener('submit', handleEditUserFormSubmit);
 
 function createUserCard(evt) {
     evt.preventDefault();
-    const placeNameCardInput = page.querySelector('.popup__input_type_place');
-    const imgCardInput = page.querySelector('.popup__input_type_link');
     const name = placeNameCardInput.value;
     const link = imgCardInput.value;
     cardsSection.prepend(createCard({ name, link }));
-    page.querySelector('.popup__form-edit-card').reset();
+    formEditCard.reset();
     closePopup(cardAddPopup);
 };
 
@@ -125,18 +135,25 @@ cardAddPopup.addEventListener('submit', createUserCard);
 
 // Функция отключения кнопки отправки формы
 function deactivationFormSubmitButton(obj) {
-    wichPopupIsOpened();
+    const popup = wichPopupIsOpened();
     const submitBtn = popup.querySelector(obj.submitButtonSelector);
-    submitBtn.disabled = true;
-    submitBtn.classList.add(obj.inactiveButtonClass);
+    disableSbmButton(submitBtn, obj);
 };
 
 // Функция сброса полей формы
 function resetForm(obj) {
-    wichPopupIsOpened();
+    const popup = wichPopupIsOpened();
     const currentForm = popup.querySelector(obj.formSelector);
     const inputList = popup.querySelectorAll(obj.inputSelector);
     Array.from(inputList).forEach(itemList => hideInputError(currentForm, itemList, CONFIG_FORM_VALIDATION));
     currentForm.reset();
+}
+
+// Функция добавления фокуса на инпут.
+function focusOnIput (item) {
+    setTimeout(() => {
+        item.focus();
+    }, 100
+    );
 }
 

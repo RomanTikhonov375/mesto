@@ -12,11 +12,11 @@ const hideInputError = (formElement, inputElement, obj) => {
   errorElement.textContent = '';
 };
 
-const checkInputValidity = (formElement, inputElement) => {
+const checkInputValidity = (formElement, inputElement, obj) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, CONFIG_FORM_VALIDATION);
+    showInputError(formElement, inputElement, inputElement.validationMessage, obj);
   } else {
-    hideInputError(formElement, inputElement, CONFIG_FORM_VALIDATION);
+    hideInputError(formElement, inputElement, obj);
   }
 };
 
@@ -24,12 +24,12 @@ const checkInputValidity = (formElement, inputElement) => {
 function setEventListeners(formElement, obj) {
   const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
   const buttonElement = formElement.querySelector(obj.submitButtonSelector);
-  toggleButtonState(inputList, buttonElement, CONFIG_FORM_VALIDATION);
+  toggleButtonState(inputList, buttonElement, obj);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', () => {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement, CONFIG_FORM_VALIDATION);
+      checkInputValidity(formElement, inputElement, obj);
+      toggleButtonState(inputList, buttonElement, obj);
     });
   });
 };
@@ -42,12 +42,9 @@ function hasInvalidInput(inputList) {
 
 function toggleButtonState(inputList, buttonElement, obj) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(obj.inactiveButtonClass);
-    buttonElement.disabled = true;
+    disableSbmButton(buttonElement, obj);
   } else {
-
-    buttonElement.classList.remove(obj.inactiveButtonClass);
-    buttonElement.disabled = false;
+    enableSbmButton(buttonElement, obj);
   }
 };
 
@@ -57,8 +54,18 @@ function enableValidation(obj) {
     formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
-    setEventListeners(formElement, CONFIG_FORM_VALIDATION);
+    setEventListeners(formElement, obj);
   });
 };
 
 enableValidation(CONFIG_FORM_VALIDATION);
+
+function disableSbmButton (buttonElement, obj) {
+    buttonElement.classList.add(obj.inactiveButtonClass);
+    buttonElement.disabled = true;
+};
+
+function enableSbmButton (buttonElement, obj) {
+  buttonElement.classList.remove(obj.inactiveButtonClass);
+  buttonElement.disabled = false;
+};
