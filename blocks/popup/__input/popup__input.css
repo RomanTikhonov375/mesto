@@ -7,12 +7,12 @@
     border: 0;
     border-bottom: 1px solid rgba(84, 84, 84, 0.2);
     width: 358px;
-    margin: 30px auto 0;
+    margin: 5px auto 0;
     outline: none;
 }
 
 @media screen and (max-width:540px) {
     .popup__input {
-       width: 238px;
+        width: 238px;
     }
 }

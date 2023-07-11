@@ -19,7 +19,7 @@ function createCard({ name, link }) {
     const cardImage = cardElement.querySelector('.card__image');
 
     cardImage.addEventListener('click', () => {
-        page.querySelector('.popup__image').alt = name; // Это была невнимательность:)
+        page.querySelector('.popup__image').alt = name; 
         page.querySelector('.popup__image').src = link;
         page.querySelector('.popup__caption').textContent = name;
         openPopup(imageCardPopup);
@@ -41,7 +41,7 @@ function addCardsFromArray(arr) {
 addCardsFromArray(initialCards);
 
 // Функция добавления в инпуты информации со страницы
-function editProfileForm() {
+function editProfileFormAddDefaultInputs() {
     formEditProfile['user-name'].value = page.querySelector('.profile__user-name').textContent;
     formEditProfile['user-career'].value = page.querySelector('.profile__career').textContent;
 };
@@ -49,19 +49,50 @@ function editProfileForm() {
 // Функция открытия попапов
 function openPopup(element) {
     element.classList.add('popup_opened');
+    document.addEventListener('keydown', closePopupByKeyEsc);
+    element.addEventListener('click', closePopupOnOverlayClick);
+    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
+    resetForm(CONFIG_FORM_VALIDATION);
 };
 
 buttonAddCard.addEventListener('click', () => openPopup(cardAddPopup));
-editButton.addEventListener('click', () => { openPopup(editProfilePopup); editProfileForm() });
+editButton.addEventListener('click', () => { openPopup(editProfilePopup); editProfileFormAddDefaultInputs() });
 
-// Функция закрытия попапов
+//Функция определения открытого попапа
+function wichPopupIsOpened() {
+    return popup = Array.from(popups).find(item => item.classList.contains('popup_opened'));
+};
+
+// Функция закрытия попапов по крестику
 closeButtons.forEach((elem) => {
     const buttonPopup = elem.closest('.popup');
-    elem.addEventListener('click', () => closePopup(buttonPopup)); // Спасибо за объяснение, не очень понял из прошлого комментария , как нужно реализовать, теперь понятно как это работает.
+    elem.addEventListener('click', () => closePopup(buttonPopup));
 });
+
+//Функция закрытия попапа по нажатию на Esc
+function closePopupByKeyEsc(evt) {
+    wichPopupIsOpened();
+    if (evt.key === "Escape") {
+        closePopup(popup);
+    };
+};
+
+//Фукнция закрытия попапа по оверлею
+function closePopupOnOverlayClick(evt) {
+    wichPopupIsOpened();
+    if (evt.target === evt.currentTarget) {
+        closePopup(popup);
+    };
+};
+
+
+//Функция закрытия попапа
 
 function closePopup(element) {
     element.classList.remove('popup_opened');
+    document.removeEventListener('keydown', closePopupByKeyEsc);
+    element.removeEventListener('click', closePopupOnOverlayClick);
+
 };
 
 // Функция обработчик отправки формы
@@ -91,3 +122,21 @@ function createUserCard(evt) {
 };
 
 cardAddPopup.addEventListener('submit', createUserCard);
+
+// Функция отключения кнопки отправки формы
+function deactivationFormSubmitButton(obj) {
+    wichPopupIsOpened();
+    const submitBtn = popup.querySelector(obj.submitButtonSelector);
+    submitBtn.disabled = true;
+    submitBtn.classList.add(obj.inactiveButtonClass);
+};
+
+// Функция сброса полей формы
+function resetForm(obj) {
+    wichPopupIsOpened();
+    const currentForm = popup.querySelector(obj.formSelector);
+    const inputList = popup.querySelectorAll(obj.inputSelector);
+    Array.from(inputList).forEach(itemList => hideInputError(currentForm, itemList, CONFIG_FORM_VALIDATION));
+    currentForm.reset();
+}
+
