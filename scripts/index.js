@@ -12,7 +12,7 @@ const profileUserName = page.querySelector('.profile__user-name');
 const profileCareer = page.querySelector('.profile__career');
 const placeNameCardInput = page.querySelector('.popup__input_type_place');
 const imgCardInput = page.querySelector('.popup__input_type_link');
-const formEditCard =  page.querySelector('.popup__form-edit-card');
+const formEditCard = page.querySelector('.popup__form-edit-card');
 
 // находим список 
 const cardsTemplate = document.querySelector('.cards-list-container').content; // добавляем template разметку
@@ -25,7 +25,7 @@ function createCard({ name, link }) {
     const cardImage = cardElement.querySelector('.card__image');
 
     cardImage.addEventListener('click', () => {
-        page.querySelector('.popup__image').alt = name; 
+        page.querySelector('.popup__image').alt = name;
         page.querySelector('.popup__image').src = link;
         page.querySelector('.popup__caption').textContent = name;
         openPopup(imageCardPopup);
@@ -56,26 +56,30 @@ function editProfileFormAddDefaultInputs() {
 function openPopup(element) {
     element.classList.add('popup_opened');
     document.addEventListener('keydown', closePopupByKeyEsc);
-    element.addEventListener('click', closePopupOnOverlayClick);
 };
 
-buttonAddCard.addEventListener('click', () => { 
-    openPopup(cardAddPopup); 
-    resetForm(CONFIG_FORM_VALIDATION); 
+// Навешиваем слушатели на кнопку создания пользовательской карточки
+buttonAddCard.addEventListener('click', () => {
+    openPopup(cardAddPopup);
+    resetForm(CONFIG_FORM_VALIDATION);
     deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
     focusOnIput(cardAddPopupImgHeadingInput);
 });
 
-editButton.addEventListener('click', () => { 
-     openPopup(editProfilePopup);
-     editProfileFormAddDefaultInputs();
-     deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
-    });
+// Навешиваем слушатели на кнопку редактирования профиля
+editButton.addEventListener('click', () => {
+    openPopup(editProfilePopup);
+    editProfileFormAddDefaultInputs();
+    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION);
+});
+
+// Навешиваем слушатели на все попапы для закрытия по оверлею ** 
+popups.forEach(item => item.addEventListener('click', closePopupOnOverlayClick));
 
 //Функция определения открытого попапа
 function wichPopupIsOpened() {
     return Array.from(popups).find(item => item.classList.contains('popup_opened'));
-    
+
 };
 
 // Функция закрытия попапов по крестику
@@ -102,7 +106,6 @@ function closePopupOnOverlayClick(evt) {
 
 
 //Функция закрытия попапа
-
 function closePopup(element) {
     element.classList.remove('popup_opened');
     document.removeEventListener('keydown', closePopupByKeyEsc);
@@ -117,11 +120,7 @@ function handleEditUserFormSubmit(evt) {
     closePopup(editProfilePopup);
 };
 
-formEditProfile.addEventListener('submit', handleEditUserFormSubmit);
-
-
 //Функция создания карточки
-
 function createUserCard(evt) {
     evt.preventDefault();
     const name = placeNameCardInput.value;
@@ -131,7 +130,11 @@ function createUserCard(evt) {
     closePopup(cardAddPopup);
 };
 
+// Навешиваем слушатель на кнопку самбит формы добавления карточки
 cardAddPopup.addEventListener('submit', createUserCard);
+
+// Навешиваем слушатель на кнопку самбит формы редактирования профиля
+formEditProfile.addEventListener('submit', handleEditUserFormSubmit);
 
 // Функция отключения кнопки отправки формы
 function deactivationFormSubmitButton(obj) {
@@ -150,7 +153,7 @@ function resetForm(obj) {
 }
 
 // Функция добавления фокуса на инпут.
-function focusOnIput (item) {
+function focusOnIput(item) {
     setTimeout(() => {
         item.focus();
     }, 100
