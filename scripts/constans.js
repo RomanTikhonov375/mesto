@@ -34,3 +34,5 @@ const CONFIG_FORM_VALIDATION = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
 };
+
+export {initialCards, CONFIG_FORM_VALIDATION}
