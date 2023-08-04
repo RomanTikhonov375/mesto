@@ -1,4 +1,4 @@
-import { page, openPopup, imageCardPopup } from "./index.js";
+import {handleOpenPopup } from "./index.js";
 
 export class Card {
     // Передаем в констуктор данные для карточки и селектор темплейт элемента
@@ -10,22 +10,14 @@ export class Card {
         this._like = this._element.querySelector('.card__like-button'); // находим кнопку лайка
         this._trash = this._element.querySelector('.card__trash'); // находим кнопку корзины
         this._image = this._element.querySelector('.card__image'); // находим элемент с картинкой
+        this._handlePopup = handleOpenPopup;
     }
 
     // Метод установки данных для карточки
     _setData() {
-        this._element.querySelector('.card__image').src = this._link;
-        this._element.querySelector('.card__image').alt = this._name;
+        this._image.src = this._link;
+        this._image.alt = this._name;
         this._element.querySelector('.card__name').textContent = this._name;
-
-        return this._element;
-    }
-
-    // Метод открытия попапа с картинкой 
-    _openImagePopup() {
-        page.querySelector('.popup__image').alt = this._name;
-        page.querySelector('.popup__image').src = this._link;
-        page.querySelector('.popup__caption').textContent = this._name;
     }
 
     // Метод удаления карточки
@@ -41,19 +33,18 @@ export class Card {
     // Метод устанавливки слушателей на карточку
     _setEventListeners() {
         this._image.addEventListener('click', () => {
-            this._openImagePopup();
-            openPopup(imageCardPopup);
+            this._handlePopup(this._name, this._link);
         });
-
         this._like.addEventListener('click', () => this._likeCard());
-        this._trash.addEventListener('click', () => this._deleteCard()); // функция удаления карточки
+        this._trash.addEventListener('click', () => this._deleteCard());
 
     }
 
     // Публичный метод для рендера карточки
     getView() {
         this._setEventListeners();
-        return this._setData();
+        this._setData();
+        return this._element;
     }
 
 
