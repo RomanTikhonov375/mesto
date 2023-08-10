@@ -1,6 +1,7 @@
 import { Card } from "./Card.js";
 import { initialCards, CONFIG_FORM_VALIDATION } from "./constans.js";
 import { FormValidator } from "./FormValidator.js";
+import { Section } from "./Section.js";
 
 const page = document.querySelector('.page');
 const editButton = page.querySelector('.profile__edit-button');
@@ -20,17 +21,32 @@ const formEditCard = page.querySelector('.popup__form-edit-card');
 // находим список 
 const cardsSection = document.querySelector('.cards-list');
 
-// Функция создания карточки 
-function createCard({ name, link }) {
-    const card = new Card({ name, link }, ".cards-list-container");
-    const cardElement = card.getView();
-    cardsSection.prepend(cardElement);
+const initialCardList = new Section({
+    items: initialCards,
+    renderer: (item) => {
+        const card = new Card({item}, ".cards-list-container");
+        console.log(item);
+        const cardElement = card.getView();
+        initialCardList.setItem(cardElement);
+    },
 
-}
-// добавление карточек из исходного массива
-initialCards.forEach((item) => {
-    createCard(item);
-});
+  }, '.cards-list');
+   console.log(initialCardList);
+
+   initialCardList.renderItems();
+
+// Функция создания карточки 
+// function createCard({ name, link }) {
+//     const card = new Card({ name, link }, ".cards-list-container");
+//     console.log(card._element);
+//     const cardElement = card.getView();
+//     cardsSection.prepend(cardElement);
+
+// }
+// // добавление карточек из исходного массива
+// initialCards.forEach((item) => {
+//     createCard(item);
+// });
 
 // Функция добавления в инпуты информации со страницы
 function editProfileFormAddDefaultInputs() {
@@ -111,7 +127,7 @@ function createUserCard(evt) {
     evt.preventDefault();
     const name = placeNameCardInput.value;
     const link = imgCardInput.value;
-    createCard(name, link);
+    createCard({name, link});
     closePopup(cardAddPopup);
 };
 
