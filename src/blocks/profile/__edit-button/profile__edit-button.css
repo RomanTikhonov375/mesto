@@ -1,7 +1,7 @@
 .profile__edit-button {
     height: 24px;
     width: 24px;
-    background-image: url(../../../images/Edit\ Button.svg);
+    background-image: url(../../../images/EditButton.svg);
     border: none;
     background-color: transparent;
     margin-left: 18px;
@@ -12,7 +12,7 @@
 
 @media screen and (max-width:900px) {
     .profile__edit-button {
-        background-image: url(../../../images/Edit\ Button\ 18.svg);
+        background-image: url(../../../images/EditButton18.svg);
         height: 18px;
         width: 18px;
         background-position: center;

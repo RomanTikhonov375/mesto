@@ -1,22 +1,16 @@
-import {handleOpenPopup } from "./index.js";
-
-
 export class Card {
     // Передаем в констуктор данные для карточки и селектор темплейт элемента
-    constructor(data, templateSelector) {
+    constructor(data, templateSelector, handleCardClick) {
         this._name = data.name;
         this._link = data.link;
         this._template = templateSelector;
-        console.log(templateSelector);
-        this._element = document.querySelector(templateSelector);
-        console.log(document);
-        console.log(this._element);
-        // .content.
-        // cloneNode(true); // создаем темплейт элемент
+        this._element = document.querySelector(templateSelector)
+            .content
+            .cloneNode(true); // создаем темплейт элемент
         this._like = this._element.querySelector('.card__like-button'); // находим кнопку лайка
         this._trash = this._element.querySelector('.card__trash'); // находим кнопку корзины
         this._image = this._element.querySelector('.card__image'); // находим элемент с картинкой
-        this._handlePopup = handleOpenPopup;
+        this._handlePopup = handleCardClick;
     }
 
     // Метод установки данных для карточки

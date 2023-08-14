@@ -7,18 +7,17 @@ export class Section {
 
     // Публичный метод добавления принимающий элемент и добавляющий его в разметку
     addItem(element) {
-        this._container.append(element);
+        this._container.prepend(element);
     }
-    // Публичный метод очистки контейнера
-    clear() {
-        this._container.innerHTML = '';
-    }
+
     // Публичный метод отрисовки всех элементов, с помощью функции renderer
     renderItems() {
-        this.clear();
+        // Проверка если передаваемый элемент массив, то делаем перебор, иначе просто добавляем элемент. 
+        if (Array.isArray(this._renderedItems)) {
+            this._renderedItems.forEach(item => {
+                this._renderer(item);
+            });
+        } else this._renderer(this._renderedItems);
 
-        this._renderedItems.forEach(item => {
-            this._renderer(item);
-        });
     }
 }
