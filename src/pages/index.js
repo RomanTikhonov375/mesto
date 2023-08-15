@@ -1,20 +1,18 @@
 import '../pages/index.css';
-import { Card } from "./components/Card.js";
-import { initialCards, CONFIG_FORM_VALIDATION } from "./constans.js";
-import { FormValidator } from "./components/FormValidator.js";
-import { Section } from "./components/Section.js";
-import { Popup } from "./components/Popup.js";
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-import { UserInfo } from "./components/UserInfo.js";
+import { Card } from "../scripts/components/Card.js";
+import { initialCards, CONFIG_FORM_VALIDATION } from "../scripts/constans.js";
+import { FormValidator } from "../scripts/components/FormValidator.js";
+import { Section } from "../scripts/components/Section.js";
+import { Popup } from "../scripts/components/Popup.js";
+import { PopupWithImage } from '../scripts/components/PopupWithImage.js';
+import { PopupWithForm } from '../scripts/components/PopupWithForm.js';
+import { UserInfo } from "../scripts/components/UserInfo.js";
 
 const page = document.querySelector('.page');
 const editButton = page.querySelector('.profile__edit-button');
-const popups = page.querySelectorAll('.popup');
-const formEditProfile = page.querySelector('.popup__form-edit-profile');
 const buttonAddCard = page.querySelector('.profile__add-button');
 const cardAddPopupImgHeadingInput = page.querySelector('.popup__input_type_place');
-const formEditCard = page.querySelector('.popup__form-edit-card');
+const formEditProfile = document.forms['edit-profile'];
 
 // Создание эземляра класса PopupWithImage
 const imagePopup = new PopupWithImage('.imageCard-popup');
@@ -25,20 +23,19 @@ const userInformation = new UserInfo(
         userCareerSelector: '.profile__career'
     });
 
+// Создание эземляра класса Section
+const cardList = new Section({
+    items: initialCards,
+    renderer: (item) => {
+        createCard(item, cardList);
+    },
+}, '.cards-list');
 
-// Функция создания эземляра класса Section
-// data - параметр для передачи массива с данными 
-function renderCard(data) {
-    const CardList = new Section({
-        items: data,
-        renderer: (item) => {
-            createCard(item, CardList);
-        },
-    }, '.cards-list');
-    CardList.renderItems();
+function renderCard(obj) {
+    obj.renderItems();
 }
 
-renderCard(initialCards);
+ renderCard(cardList);
 
 // Функция создания эземляра класса Card
 // Параметры для передачи
@@ -46,12 +43,16 @@ renderCard(initialCards);
 // cardList: разметка подготовленная классом Section,
 // ".cards-list-container": селектор Template элемента,
 // handleCardClick: Функция для передачи колбэка, для открытия imagePopup
-function createCard(item, cardlist) {
+function getCard(item) {
     const card = new Card(item, ".cards-list-container", handleCardClick);
-    const cardElement = card.getView();
-    cardlist.addItem(cardElement);
+    return card.getView();
 
 };
+
+function createCard(item, cardlist) {
+    const cardElement = getCard(item);
+    cardlist.addItem(cardElement);
+}
 
 // Функция добавления в инпуты информации со страницы
 function editProfileFormAddDefaultInputs() {
@@ -62,24 +63,18 @@ function editProfileFormAddDefaultInputs() {
 
 // Навешиваем слушатели на кнопку создания пользовательской карточки
 buttonAddCard.addEventListener('click', () => {
-    createPopupClass('.cardAdd-popup').open();
-    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION, addCardValidation);
-    addCardValidation.resetErrors();
+    userAddCardPopup.open();
+    formValidators['edit-card'].disableSbmButton();
+    formValidators['edit-card'].resetErrors();
     focusOnIput(cardAddPopupImgHeadingInput);
 });
 
 // Навешиваем слушатели на кнопку редактирования профиля
 editButton.addEventListener('click', () => {
-    createPopupClass('.editProfile-popup').open();
+    userProfilePopup.open();
     editProfileFormAddDefaultInputs();
-    deactivationFormSubmitButton(CONFIG_FORM_VALIDATION, userProfileValidation);
+    formValidators['edit-profile'].disableSbmButton();
 });
-
-//Функция определения открытого попапа
-function wichPopupIsOpened() {
-    return Array.from(popups).find(item => item.classList.contains('popup_opened'));
-
-};
 
 // Функция обработчик отправки формы userInfo
 function handleEditUserFormSubmit(obj) {
@@ -88,15 +83,14 @@ function handleEditUserFormSubmit(obj) {
 
 // Функция обработчик отправки формы userCard
 function createUserCard(obj) {
-    renderCard(obj);
+    const card = new Section({
+        items: obj,
+        renderer: (item) => {
+            createCard(item, card);
+        },
+    }, '.cards-list');
+    renderCard(card);
     userCard.close();
-};
-
-// Функция отключения кнопки отправки формы
-function deactivationFormSubmitButton(obj, currentValidationForm) {
-    const popup = wichPopupIsOpened();
-    const submitBtn = popup.querySelector(obj.submitButtonSelector);
-    currentValidationForm.disableSbmButton(submitBtn, obj);
 };
 
 // Функция добавления фокуса на инпут.
@@ -109,25 +103,35 @@ function focusOnIput(item) {
 
 // Функция открытия попапа с картинкой, для передачи в конструктор
 function handleCardClick(name, link) {
-    imagePopup.setEventListeners();
     imagePopup.open(name, link);
 }
 
-// Функция создания экземпляра класса FormValidator
-function initializationOfValadition(data, formElement) {
-    const ValidatedForm = new FormValidator(data, formElement);
-    ValidatedForm.enableValidation();
-    return ValidatedForm;
-}
-const addCardValidation = initializationOfValadition(CONFIG_FORM_VALIDATION, formEditCard);
-const userProfileValidation = initializationOfValadition(CONFIG_FORM_VALIDATION, formEditProfile);
+imagePopup.setEventListeners();
 
-// Функция создания экземпляра класса Popup
-function createPopupClass(popupSelector) {
-    const popup = new Popup(popupSelector);
-    popup.setEventListeners();
-    return popup;
-}
+const formValidators = {}
+
+// Включение валидации
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(config, formElement)
+// получаем данные из атрибута `name` у формы
+    const formName = formElement.getAttribute('name')
+
+   // вот тут в объект записываем под именем формы
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+
+enableValidation(CONFIG_FORM_VALIDATION);
+
+
+const userProfilePopup = new Popup('.editProfile-popup');
+userProfilePopup.setEventListeners();
+
+const userAddCardPopup = new Popup('.cardAdd-popup');
+userAddCardPopup.setEventListeners();
 
 const userCard = new PopupWithForm('.cardAdd-popup', createUserCard);
 userCard.setEventListeners();

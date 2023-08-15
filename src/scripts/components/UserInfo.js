@@ -14,10 +14,8 @@ export class UserInfo {
 
     setUserInfo(obj) {
         this.getUserInfo();
-        this._userData.userName = obj['user-name']
-        this._userData.userCareer = obj['user-career'];
-        this._userNameElement.textContent = this._userData.userName;
-        this._userCareerElement.textContent = this._userData.userCareer;
+        this._userNameElement.textContent = obj["user-name"];
+        this._userCareerElement.textContent = obj["user-career"];
     };
 
 }
