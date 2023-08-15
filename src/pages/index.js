@@ -3,7 +3,6 @@ import { Card } from "../scripts/components/Card.js";
 import { initialCards, CONFIG_FORM_VALIDATION } from "../scripts/constans.js";
 import { FormValidator } from "../scripts/components/FormValidator.js";
 import { Section } from "../scripts/components/Section.js";
-import { Popup } from "../scripts/components/Popup.js";
 import { PopupWithImage } from '../scripts/components/PopupWithImage.js';
 import { PopupWithForm } from '../scripts/components/PopupWithForm.js';
 import { UserInfo } from "../scripts/components/UserInfo.js";
@@ -63,7 +62,7 @@ function editProfileFormAddDefaultInputs() {
 
 // Навешиваем слушатели на кнопку создания пользовательской карточки
 buttonAddCard.addEventListener('click', () => {
-    userAddCardPopup.open();
+    cardPopup.open();
     formValidators['edit-card'].disableSbmButton();
     formValidators['edit-card'].resetErrors();
     focusOnIput(cardAddPopupImgHeadingInput);
@@ -71,26 +70,20 @@ buttonAddCard.addEventListener('click', () => {
 
 // Навешиваем слушатели на кнопку редактирования профиля
 editButton.addEventListener('click', () => {
-    userProfilePopup.open();
+    profilePopup.open();
     editProfileFormAddDefaultInputs();
     formValidators['edit-profile'].disableSbmButton();
 });
 
-// Функция обработчик отправки формы userInfo
+// Функция обработчик отправки формы profilePopup
 function handleEditUserFormSubmit(obj) {
     userInformation.setUserInfo(obj);
 };
 
-// Функция обработчик отправки формы userCard
+// Функция обработчик отправки формы cardPopup
 function createUserCard(obj) {
-    const card = new Section({
-        items: obj,
-        renderer: (item) => {
-            createCard(item, card);
-        },
-    }, '.cards-list');
-    renderCard(card);
-    userCard.close();
+    createCard(obj, cardList);
+    cardPopup.close();
 };
 
 // Функция добавления фокуса на инпут.
@@ -126,15 +119,8 @@ const enableValidation = (config) => {
 
 enableValidation(CONFIG_FORM_VALIDATION);
 
+const cardPopup = new PopupWithForm('.cardAdd-popup', createUserCard);
+cardPopup.setEventListeners();
 
-const userProfilePopup = new Popup('.editProfile-popup');
-userProfilePopup.setEventListeners();
-
-const userAddCardPopup = new Popup('.cardAdd-popup');
-userAddCardPopup.setEventListeners();
-
-const userCard = new PopupWithForm('.cardAdd-popup', createUserCard);
-userCard.setEventListeners();
-
-const userInfo = new PopupWithForm('.editProfile-popup', handleEditUserFormSubmit);
-userInfo.setEventListeners();
+const profilePopup = new PopupWithForm('.editProfile-popup', handleEditUserFormSubmit);
+profilePopup.setEventListeners();
