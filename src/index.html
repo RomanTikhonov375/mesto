@@ -17,11 +17,11 @@
             <div class="profile__avatar"></div>
             <div class="profile__info">
                 <div class="profile__user-name-wrapper">
-                    <h1 class="profile__user-name">Жак-Ив Кусто</h1>
+                    <h1 class="profile__user-name"></h1>
                     <button class="profile__edit-button opacity" type="button"
                         aria-label="редактировать профиль"></button>
                 </div>
-                <p class="profile__career">Исследователь океана</p>
+                <p class="profile__career"></p>
             </div>
 
             <button class="profile__add-button opacity" type="button" aria-label="добавить карточку"></button>
@@ -37,10 +37,10 @@
                 <button class="popup__close-btn opacity" type="button" aria-label="закрыть окно"></button>
                 <h2 class="popup__heading">Редактировать профиль</h2>
                 <form action="#" class="popup__form popup__form-edit-profile" name="edit-profile" novalidate>
-                    <input type="text" class="popup__input popup__input_type_name" id="user-name" name="user-name"
+                    <input type="text" class="popup__input popup__input_type_name" id="user-name" name="name"
                         placeholder="Введите ваше имя" required maxlength="40" minlength="2">
                     <span id="user-name-error" class="popup__input-error"></span>
-                    <input type="text" class="popup__input popup__input_type_career" id="user-career" name="user-career"
+                    <input type="text" class="popup__input popup__input_type_career" id="user-career" name="about"
                         placeholder="Введите ваше призвание" required minlength="2" maxlength="200">
                     <span id="user-career-error" class="popup__input-error"></span>
                     <button type="submit" class="popup__submit-btn">Сохранить</button>
@@ -69,6 +69,13 @@
                 <p class="popup__caption"></p>
             </div>
         </div>
+        <div class="popup delete-popup popup_background-color-opacity_09">
+            <div class="popup__container popup__delete-popup">
+                <h2 class="popup__heading popup__heading_margin_20">Вы уверены?</h2>
+                <button class="popup__confirm-btn popup__submit-btn opacity" type="button" aria-label="удалить">Да</button>
+                <button class="popup__close-btn opacity" type="button" aria-label="закрыть окно"></button>
+            </div>
+        </div>
     </main>
     <footer class="footer">
         <p class="footer__copyright">© 2023 Mesto Russia</p>
@@ -79,7 +86,10 @@
             <img src="#" alt="#" class="card__image">
             <div class="card__info">
                 <h2 class="card__name"></h2>
-                <button class="card__like-button" type="button" aria-label="мне нравится"></button>
+                <div class="card__like-wrapper">
+                    <button class="card__like-button" type="button" aria-label="мне нравится"></button>
+                    <span class="card__like-counter"></span>
+                </div>
             </div>
         </li>
     </template>

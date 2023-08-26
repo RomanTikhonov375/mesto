@@ -6,12 +6,47 @@ import { Section } from "../scripts/components/Section.js";
 import { PopupWithImage } from '../scripts/components/PopupWithImage.js';
 import { PopupWithForm } from '../scripts/components/PopupWithForm.js';
 import { UserInfo } from "../scripts/components/UserInfo.js";
+import { Api } from '../scripts/components/Api.js';
+import { Popup } from '../scripts/components/Popup';
+
 
 const page = document.querySelector('.page');
 const editButton = page.querySelector('.profile__edit-button');
 const buttonAddCard = page.querySelector('.profile__add-button');
 const cardAddPopupImgHeadingInput = page.querySelector('.popup__input_type_place');
 const formEditProfile = document.forms['edit-profile'];
+
+const cardList = new Section({
+    renderer: (item) => {
+        createCard(item, cardList);
+    },
+}, '.cards-list');
+
+function renderCard(obj) {
+    obj.renderItems();
+}
+
+//Создаем экземпляп класса Api с данными пользователя и когорты
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-74',
+    headers: {
+        authorization: 'ef82b72f-312f-4f17-b9cd-ed4bbdfcd441',
+        'Content-Type': 'application/json'
+    }
+});
+
+let userId;
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+    .then(([getUserInfo, getInitialCards]) => {
+        userInformation.setUserInfo(getUserInfo);
+        userId = getUserInfo._id;
+        getInitialCards.forEach(
+            item => {
+                createCard(item, cardList, userId)
+            }
+        )
+    })
 
 // Создание эземляра класса PopupWithImage
 const imagePopup = new PopupWithImage('.imageCard-popup');
@@ -22,34 +57,20 @@ const userInformation = new UserInfo(
         userCareerSelector: '.profile__career'
     });
 
-// Создание эземляра класса Section
-const cardList = new Section({
-    items: initialCards,
-    renderer: (item) => {
-        createCard(item, cardList);
-    },
-}, '.cards-list');
-
-function renderCard(obj) {
-    obj.renderItems();
-}
-
- renderCard(cardList);
-
 // Функция создания эземляра класса Card
 // Параметры для передачи
 // item: элемент с полями name & link, 
 // cardList: разметка подготовленная классом Section,
 // ".cards-list-container": селектор Template элемента,
 // handleCardClick: Функция для передачи колбэка, для открытия imagePopup
-function getCard(item) {
-    const card = new Card(item, ".cards-list-container", handleCardClick);
+function getCard(item, userId) {
+    const card = new Card(item, ".cards-list-container", handleCardClick, userId, handleDeleteCard);
     return card.getView();
 
 };
 
-function createCard(item, cardlist) {
-    const cardElement = getCard(item);
+function createCard(item, cardlist, userId) {
+    const cardElement = getCard(item, userId);
     cardlist.addItem(cardElement);
 }
 
@@ -77,12 +98,16 @@ editButton.addEventListener('click', () => {
 
 // Функция обработчик отправки формы profilePopup
 function handleEditUserFormSubmit(obj) {
+    api.editingProfile(obj.name, obj.about);
     userInformation.setUserInfo(obj);
 };
 
 // Функция обработчик отправки формы cardPopup
 function createUserCard(obj) {
-    createCard(obj, cardList);
+    api.setUserCard(obj.name, obj.link)
+        .then(obj => {
+            createCard(obj, cardList, userId, handleDeleteCard)
+        })
     cardPopup.close();
 };
 
@@ -105,16 +130,16 @@ const formValidators = {}
 
 // Включение валидации
 const enableValidation = (config) => {
-  const formList = Array.from(document.querySelectorAll(config.formSelector))
-  formList.forEach((formElement) => {
-    const validator = new FormValidator(config, formElement)
-// получаем данные из атрибута `name` у формы
-    const formName = formElement.getAttribute('name')
+    const formList = Array.from(document.querySelectorAll(config.formSelector))
+    formList.forEach((formElement) => {
+        const validator = new FormValidator(config, formElement)
+        // получаем данные из атрибута `name` у формы
+        const formName = formElement.getAttribute('name')
 
-   // вот тут в объект записываем под именем формы
-    formValidators[formName] = validator;
-    validator.enableValidation();
-  });
+        // вот тут в объект записываем под именем формы
+        formValidators[formName] = validator;
+        validator.enableValidation();
+    });
 };
 
 enableValidation(CONFIG_FORM_VALIDATION);
@@ -124,3 +149,18 @@ cardPopup.setEventListeners();
 
 const profilePopup = new PopupWithForm('.editProfile-popup', handleEditUserFormSubmit);
 profilePopup.setEventListeners();
+
+const deletePopup = new Popup('.delete-popup');
+deletePopup.setEventListeners();
+
+const handleDeleteCard = (id, card) => {
+    if (card.userId === card.ownerId) {
+        api.deleteCard(id)
+        .then( ()=> {
+            deletePopup.close();
+            card.delete();
+        })
+    }
+ 
+
+}

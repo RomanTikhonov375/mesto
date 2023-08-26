@@ -13,8 +13,8 @@ export class UserInfo {
     }
 
     setUserInfo(obj) {
-        this._userNameElement.textContent = obj["user-name"];
-        this._userCareerElement.textContent = obj["user-career"];
+        this._userNameElement.textContent = obj["name"];
+        this._userCareerElement.textContent = obj["about"];
     };
 
 }
