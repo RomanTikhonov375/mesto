@@ -8,6 +8,7 @@ import { PopupWithForm } from '../scripts/components/PopupWithForm.js';
 import { UserInfo } from "../scripts/components/UserInfo.js";
 import { Api } from '../scripts/components/Api.js';
 import { Popup } from '../scripts/components/Popup';
+import { PopupWithConfirmButton } from '../scripts/components/PopupWithConfirmButton.js';
 
 
 const page = document.querySelector('.page');
@@ -106,7 +107,7 @@ function handleEditUserFormSubmit(obj) {
 function createUserCard(obj) {
     api.setUserCard(obj.name, obj.link)
         .then(obj => {
-            createCard(obj, cardList, userId, handleDeleteCard)
+            createCard(obj, cardList, userId)
         })
     cardPopup.close();
 };
@@ -150,17 +151,21 @@ cardPopup.setEventListeners();
 const profilePopup = new PopupWithForm('.editProfile-popup', handleEditUserFormSubmit);
 profilePopup.setEventListeners();
 
-const deletePopup = new Popup('.delete-popup');
+const deletePopup = new PopupWithConfirmButton('.delete-popup');
 deletePopup.setEventListeners();
 
 const handleDeleteCard = (id, card) => {
-    if (card.userId === card.ownerId) {
+    deletePopup._setConfirmAction(() => {
+   if (card.userId === card.ownerId) {
+        console.log(id);
         api.deleteCard(id)
         .then( ()=> {
             deletePopup.close();
             card.delete();
         })
     }
+    })
  
 
 }
+

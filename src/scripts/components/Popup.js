@@ -5,7 +5,7 @@ export class Popup {
         this._closeButton = this._element.querySelector('.popup__close-btn');
         this._handleEscClose = this._handleEscClose.bind(this)
     };
-
+   
 
     close() {
         this._element.classList.remove('popup_opened');
@@ -20,7 +20,6 @@ export class Popup {
     };
 
     setEventListeners() {
-
         this._element.addEventListener('click', this._handleOverlayClose.bind(this));
         this._closeButton.addEventListener('click', this.close.bind(this));
     }

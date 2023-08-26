@@ -18,7 +18,7 @@ export class Card {
         this._image = this._element.querySelector('.card__image'); // находим элемент с картинкой
         this._handlePopup = handleCardClick;
         this._deletePopup = document.querySelector('.delete-popup');
-        this._confirmDeleteButton = document.querySelector('.popup__confirm-btn');
+        
         this._card = this._element.querySelector('.card')
     }
 
@@ -39,7 +39,7 @@ export class Card {
     // Метод удаления карточки
     _deleteCardPopup() {
         this._deletePopup.classList.add('popup_opened');
-        
+        this._deleteCard(this.cardId, this);
     }
 
    
@@ -55,7 +55,7 @@ export class Card {
         });
         this._like.addEventListener('click', () => this._likeCard());
         this._trash.addEventListener('click', () => this._deleteCardPopup());
-        this._confirmDeleteButton.addEventListener('click', () => this._deleteCard(this.cardId, this));
+       
     }
 
     // Публичный метод для рендера карточки
