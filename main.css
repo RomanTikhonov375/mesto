@@ -14,14 +14,17 @@
 .profile__add-button{align-self:center;background-color:transparent;background-image:url(images/AddButton.13997fdf54b4cb323817.svg);background-repeat:no-repeat;border:none;border-radius:2px;cursor:pointer;height:50px;margin-left:auto;padding:0;width:150px}@media screen and (max-width:940px){.profile__add-button{background-image:url(images/AddButton320.6f86ece55e54220c5485.svg);margin-left:0;width:282px}}
 .profile__user-name-wrapper{display:flex}
 .cards{margin:0 auto;max-width:68.7%;padding-top:56px}@media screen and (max-width:840px){.cards{max-width:90%}}@media screen and (max-width:420px){.cards{max-width:88%;padding-top:36px}}
-.card__trash{background-color:transparent;background-image:url(images/Trash.823b0cf1b0b7e9cb7cad.svg);background-repeat:no-repeat;border:0;cursor:pointer;height:19px;padding:0;position:absolute;right:20px;top:20px;width:18px}
+.card__trash{background-color:transparent;background-image:url(images/Trash.823b0cf1b0b7e9cb7cad.svg);background-repeat:no-repeat;border:0;cursor:pointer;display:none;height:19px;padding:0;position:absolute;right:20px;top:20px;width:18px}
 .card{display:flex;flex-direction:column;position:relative;width:100%}
 .card__like-button{background-color:transparent;background-image:url(images/like.1ad06e85f169668a1f36.svg);background-repeat:no-repeat;border:none;cursor:pointer;height:19px;margin-left:10px;padding-right:36px;width:22px}.card__like-button:hover{opacity:.5;transition:opacity .5s}
 .cards-list{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,281px);grid-template-rows:repeat(auto-fit,360px);list-style:none;margin:0;max-width:100%;padding:0}@media screen and (max-width:1277px){.cards-list{grid-template-columns:repeat(2,281px);justify-content:space-around}}@media screen and (max-width:640px){.cards-list{gap:20px;grid-template-columns:281px}}
 .card__name{font-size:24px;font-style:normal;font-weight:900;line-height:29px;margin:24px 0 26px 17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card__info{align-items:center;background-color:#fff;border-radius:0 0 10px 10px;display:flex;justify-content:space-between}
 .card__image{background-color:grey;border-radius:10px 10px 0 0;cursor:pointer;display:block;flex-shrink:0;height:282px;-o-object-fit:cover;object-fit:cover;width:282px}
+.card__like-wrapper{align-items:center;display:flex;flex-direction:column}
 .card__like-button_active{background-image:url(images/Unionactive.35948469632d0421d697.svg)}
+.card__like-counter{font-size:13px;font-style:normal;font-weight:400;height:13px;line-height:15.73px;margin-right:10px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:10px}
+.card__trash_active{display:block}
 .footer{color:#545454;font-size:18px;font-style:normal;font-weight:400;line-height:22px;margin:auto 15.6% 60px;padding-top:70px}@media screen and (max-width:640px){.footer{font-size:14px;line-height:17px;margin:0 19px 36px;padding-top:48px}}
 .footer__copyright{margin:0}
 .popup{align-items:center;bottom:0;display:flex;flex-direction:column;height:100%;justify-content:center;left:0;opacity:0;position:fixed;right:0;top:0;transition:visibility .3s,opacity .5s linear;visibility:hidden;width:100%}
@@ -42,4 +45,6 @@
 .popup__input-error{color:red;font-size:12px;font-weight:400;line-height:12px;margin:5px auto 0;min-height:24px;visibility:hidden;width:358px}@media screen and (max-width:540px){.popup__input-error{width:238px}}
 .popup__input-error_active{visibility:visible}
 .popup__submit-btn_inactive{background-color:transparent;border:1px solid #c4c4c4;color:#c4c4c4}
+.popup__delete-popup{position:relative}
+.popup__heading_margin_20{margin-bottom:20px}
 
