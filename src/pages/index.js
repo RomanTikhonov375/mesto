@@ -45,6 +45,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
         getInitialCards.forEach(
             item => {
                 createCard(item, cardList, userId)
+                console.log(item);
             }
         )
     })
@@ -65,7 +66,7 @@ const userInformation = new UserInfo(
 // ".cards-list-container": селектор Template элемента,
 // handleCardClick: Функция для передачи колбэка, для открытия imagePopup
 function getCard(item, userId) {
-    const card = new Card(item, ".cards-list-container", handleCardClick, userId, handleDeleteCard);
+    const card = new Card(item, ".cards-list-container", handleCardClick, userId, handleDeleteCard, handleLikeCard);
     return card.getView();
 
 };
@@ -155,17 +156,39 @@ const deletePopup = new PopupWithConfirmButton('.delete-popup');
 deletePopup.setEventListeners();
 
 const handleDeleteCard = (id, card) => {
-    deletePopup._setConfirmAction(() => {
-   if (card.userId === card.ownerId) {
-        console.log(id);
-        api.deleteCard(id)
-        .then( ()=> {
-            deletePopup.close();
-            card.delete();
-        })
-    }
+    deletePopup.setConfirmAction(() => {
+        if (card.userId === card.ownerId) {
+            console.log(card);
+            api.deleteCard(id)
+                .then(() => {
+                    deletePopup.close();
+                    card.delete();
+                })
+        }
     })
- 
-
 }
 
+const handleLikeCard = (id, card) => {
+    if (card._likeCounter.some(like => {
+        console.log(like._id === userId)
+        return like._id === userId
+    })) {
+        api.removeLikeCard(id)
+            .then(res => {
+                card._setLikeCounter(res.likes);
+                res.likes = card._likeCounter
+                console.log(res.likes)
+                
+            });
+            card._likeCard()
+    } else {
+        api.setLikeCard(id)
+            .then(res => {
+                card._setLikeCounter(res.likes);
+                res.likes = card._likeCounter;
+                console.log(res.likes)
+            })
+            card._likeCard();
+
+    }
+}

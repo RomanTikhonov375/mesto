@@ -6,11 +6,12 @@ export class PopupWithConfirmButton extends Popup {
         this._confirmDeleteButton = document.querySelector('.popup__confirm-btn');
     }
 
-    _setConfirmAction(handleAction) {
+    setConfirmAction(handleAction) {
         this._setConfirmAction = handleAction;
     }
 
     setEventListeners() {
+        super.setEventListeners();
         this._confirmDeleteButton.addEventListener('click', () => this._setConfirmAction());
     }
 }

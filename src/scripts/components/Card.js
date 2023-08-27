@@ -1,8 +1,8 @@
 export class Card {
     // Передаем в констуктор данные для карточки и селектор темплейт элемента
-    constructor(data, templateSelector, handleCardClick, userId, handleDeleteCard) {
+    constructor(data, templateSelector, handleCardClick, userId, handleDeleteCard, handleLikeCard) {
+        this._setLikeAction = handleLikeCard;
         this._deleteCard = handleDeleteCard;
-        console.log(this._deleteCard);
         this.cardId = data._id
         this.ownerId = data.owner._id;
         this.userId = userId;
@@ -18,8 +18,8 @@ export class Card {
         this._image = this._element.querySelector('.card__image'); // находим элемент с картинкой
         this._handlePopup = handleCardClick;
         this._deletePopup = document.querySelector('.delete-popup');
-        
         this._card = this._element.querySelector('.card')
+        this._likeCounterLength =  this._element.querySelector('.card__like-counter')
     }
 
      _showTrash() {
@@ -28,12 +28,16 @@ export class Card {
          }
      }
 
+     _setLikeCounter(likeCounter) {
+        this._likeCounterLength.textContent = likeCounter.length;
+     }
+
     // Метод установки данных для карточки
     _setData() {
         this._image.src = this._link;
         this._image.alt = this._name;
         this._element.querySelector('.card__name').textContent = this._name;
-        this._element.querySelector('.card__like-counter').textContent = this._likeCounter.length;
+        this._setLikeCounter(this._likeCounter)
     }
 
     // Метод удаления карточки
@@ -53,7 +57,7 @@ export class Card {
         this._image.addEventListener('click', () => {
             this._handlePopup(this._name, this._link);
         });
-        this._like.addEventListener('click', () => this._likeCard());
+        this._like.addEventListener('click', () => this._setLikeAction(this.cardId, this));
         this._trash.addEventListener('click', () => this._deleteCardPopup());
        
     }

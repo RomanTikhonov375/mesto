@@ -64,11 +64,29 @@ export class Api {
     }
 
     deleteCard(id){
-        return fetch(`${this.baseUrl}/cards/${id}`, {
+        return fetch(`${this.baseUrl}/cards/${id}/`, {
             method: 'DELETE', 
             headers: this.headers,
         })
         .then(this._checkResponse)
+    }
+
+    setLikeCard(id){
+        return fetch(`${this.baseUrl}/cards/${id}/likes`, {
+            method: 'PUT', 
+            headers: this.headers,
+        })
+        .then(this._checkResponse)
+    
+    }
+
+    removeLikeCard(id){
+        return fetch(`${this.baseUrl}/cards/${id}/likes`, {
+            method: 'DELETE', 
+            headers: this.headers,
+        })
+        .then(this._checkResponse)
+    
     }
 
 
