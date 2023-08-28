@@ -4,6 +4,8 @@ export class Api {
         this.headers = headers;
     }
 
+
+    //Метод для обработки ошибке в запросе
     _checkResponse(res) {
         if (res.ok) {
             return res.json();
@@ -11,6 +13,8 @@ export class Api {
             return Promise.reject(`Ошибка: ${res.status}`);
         }
     }
+
+    //Метод для запроса карточек с сервера
     getInitialCards() {
         return fetch(`${this.baseUrl}/cards`, {
             headers: this.headers
@@ -19,8 +23,10 @@ export class Api {
             .then((result) => {
                 return result;
             });
+
     }
 
+    //Метод для запроса текущего пользователя с сервера
     getUserInfo() {
         return fetch(`${this.baseUrl}/users/me`, {
             headers: this.headers
@@ -33,6 +39,7 @@ export class Api {
 
     }
 
+    //Метод для обновления данных пользователя на сервере
     editingProfile(x, y) {
         return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',
@@ -48,6 +55,7 @@ export class Api {
             })
     }
 
+    //Метод для добавления карточки пользователя на сервер
     setUserCard(x, y) {
         return fetch(`${this.baseUrl}/cards`, {
             method: 'POST',
@@ -63,32 +71,47 @@ export class Api {
             })
     }
 
-    deleteCard(id){
+    //Метод для удаления карточки пользователя с сервера
+    deleteCard(id) {
         return fetch(`${this.baseUrl}/cards/${id}/`, {
-            method: 'DELETE', 
+            method: 'DELETE',
             headers: this.headers,
         })
-        .then(this._checkResponse)
+            .then(this._checkResponse)
     }
 
-    setLikeCard(id){
+    //Метод для добавления лайка пользователя на сервер
+    setLikeCard(id) {
         return fetch(`${this.baseUrl}/cards/${id}/likes`, {
-            method: 'PUT', 
+            method: 'PUT',
             headers: this.headers,
         })
-        .then(this._checkResponse)
-    
+            .then(this._checkResponse)
+
     }
 
-    removeLikeCard(id){
+    //Метод для удаления лайка пользователя с сервера
+    removeLikeCard(id) {
         return fetch(`${this.baseUrl}/cards/${id}/likes`, {
-            method: 'DELETE', 
+            method: 'DELETE',
             headers: this.headers,
         })
-        .then(this._checkResponse)
-    
+            .then(this._checkResponse)
     }
 
-
+      //Метод для изменения аватара пользователя на сервере
+    setAvatar(url) {
+        return fetch(`${this.baseUrl}/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this.headers,
+            body: JSON.stringify({
+                avatar: url
+            })
+        })
+            .then(this._checkResponse)
+            .then((result) => {
+                return result;
+            })
+    }
 
 }

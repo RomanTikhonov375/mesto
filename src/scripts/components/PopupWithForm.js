@@ -6,8 +6,11 @@ export class PopupWithForm extends Popup {
         this._submitCallback = submitCallback;
         this._inputList = this._element.querySelectorAll('.popup__input');
         this._formElement = this._element.querySelector('.popup__form');
+        this.submitButton = this._element.querySelector('.popup__submit-btn');
     }
 
+
+    //Метод для получения данных из инпутов форм
     _getInputValues() {
         this._formValues = {};
         this._inputList.forEach(input => {
@@ -16,7 +19,8 @@ export class PopupWithForm extends Popup {
 
         return this._formValues;
     }
-
+        
+    //Метод для утсановки слушателя на сабмит формы
     setEventListeners() {
         super.setEventListeners();
         this._element.addEventListener('submit', (evt) => {
@@ -25,7 +29,8 @@ export class PopupWithForm extends Popup {
             this.close();
         });
     }
-
+        
+    //Метод закрытия попапа
     close() {
         super.close();
         this._formElement.reset();
