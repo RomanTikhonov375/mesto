@@ -4,6 +4,7 @@ const buttonAddCard = page.querySelector('.profile__add-button');
 const cardAddPopupImgHeadingInput = page.querySelector('.popup__input_type_place');
 const buttonEditAvatar = page.querySelector('.profile__iconAvatar');
 const formEditProfile = document.forms['edit-profile'];
+const formAddCard = document.forms['edit-profile'];
 
 const CONFIG_FORM_VALIDATION = {
     formSelector: '.popup__form',

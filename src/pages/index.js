@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import { Card } from "../scripts/components/Card.js";
-import { page,editButton,buttonAddCard,cardAddPopupImgHeadingInput,buttonEditAvatar,formEditProfile, CONFIG_FORM_VALIDATION } from "../scripts/constans.js";
+import { editButton,buttonAddCard,cardAddPopupImgHeadingInput,buttonEditAvatar,formEditProfile, CONFIG_FORM_VALIDATION } from "../scripts/constans.js";
 import { FormValidator } from "../scripts/components/FormValidator.js";
 import { Section } from "../scripts/components/Section.js";
 import { PopupWithImage } from '../scripts/components/PopupWithImage.js';
@@ -33,7 +33,7 @@ let userId;
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([getUserInfo, getInitialCards]) => {
         userInformation.setUserInfo(getUserInfo);
-        userInformation.setUserAvatar(getUserInfo);
+        userInformation.setUserAvatar(getUserInfo.avatar);
         userId = getUserInfo._id;
         getInitialCards.forEach(
             item => {
@@ -41,9 +41,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
             }
         )
     })
-    .catch((err) => {
-        console.log(err);
-    });
+    .catch(console.error);
 
 // Создание экземпляра класса PopupWithImage
 const imagePopup = new PopupWithImage('.imageCard-popup');
@@ -76,6 +74,7 @@ function createCard(item, cardlist, userId) {
     cardlist.addItem(cardElement);
 }
 
+
 // Функция добавления в инпуты информации со страницы
 function editProfileFormAddDefaultInputs() {
     const userInformationData = userInformation.getUserInfo();
@@ -87,55 +86,17 @@ function editProfileFormAddDefaultInputs() {
 // Навешиваем слушатели на кнопку создания смены аватара
 buttonEditAvatar.addEventListener('click', () => {
     editAvatarPopup.open();
+    formValidators['edit-avatar'].disableSbmButton();
+    formValidators['edit-avatar'].resetErrors();
 })
 
-// Навешиваем слушатели на кнопку создания пользовательской карточки
-buttonAddCard.addEventListener('click', () => {
-    cardPopup.open();
-    formValidators['edit-card'].disableSbmButton();
-    formValidators['edit-card'].resetErrors();
-    focusOnIput(cardAddPopupImgHeadingInput);
-});
 
 // Навешиваем слушатели на кнопку редактирования профиля
 editButton.addEventListener('click', () => {
     profilePopup.open();
-    editProfileFormAddDefaultInputs();
+     editProfileFormAddDefaultInputs();
     formValidators['edit-profile'].disableSbmButton();
 });
-
-// Функция обработчик отправки формы profilePopup
-function handleEditUserFormSubmit(obj) {
-    profilePopup.submitButton.textContent = "Сохранение..."
-    api.editingProfile(obj.name, obj.about)
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(
-            () => {
-                profilePopup.submitButton.textContent = "Сохранить"
-            }
-        )
-    userInformation.setUserInfo(obj);
-};
-
-// Функция обработчик отправки формы cardPopup
-function createUserCard(obj) {
-    cardPopup.submitButton.textContent = "Сохранение..."
-    api.setUserCard(obj.name, obj.link)
-        .then(obj => {
-            createCard(obj, cardList, userId)
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(
-            () => {
-                profilePopup.submitButton.textContent = "Создать"
-            }
-        )
-    cardPopup.close();
-};
 
 // Функция добавления фокуса на инпут.
 function focusOnIput(item) {
@@ -174,7 +135,7 @@ enableValidation(CONFIG_FORM_VALIDATION);
 const cardPopup = new PopupWithForm('.cardAdd-popup', createUserCard);
 cardPopup.setEventListeners();
 
-const profilePopup = new PopupWithForm('.editProfile-popup', handleEditUserFormSubmit);
+const profilePopup = new PopupWithForm('.editProfile-popup', handleProfileFormSubmit);
 profilePopup.setEventListeners();
 
 const editAvatarPopup = new PopupWithForm('.edit-avatar', handleEditAvatar);
@@ -183,49 +144,6 @@ editAvatarPopup.setEventListeners();
 //Создание экземпляров класса PopupWithConfirmButton
 const deletePopup = new PopupWithConfirmButton('.delete-popup');
 deletePopup.setEventListeners();
-
-
-//Функция колбэк для функции колбэка смены аватара
-function changeAvatar(link) {
-    const avatarElement = page.querySelector('.profile__avatar');
-    avatarElement.style.backgroundImage = `url(${link})`
-}
-
-//Функция колбэк для смены аватара
-function handleEditAvatar(obj) {
-    editAvatarPopup.submitButton.textContent = "Сохранение..."
-    api.setAvatar(obj.link)
-        .then(
-            editAvatarPopup.close(),
-            changeAvatar(obj.link)
-        )
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(
-            () => {
-                profilePopup.submitButton.textContent = "Сохранить"
-            }
-        )
-
-}
-
-//Функция колбэк для удаления карточки
-const handleDeleteCard = (id, card) => {
-    deletePopup.setConfirmAction(() => {
-        if (card.userId === card.ownerId) {
-            api.deleteCard(id)
-                .then(() => {
-                    deletePopup.close();
-                    card.delete();
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        }
-    })
-}
-
 
 //Функция колбэк для лайка карточки
 const handleLikeCard = (id, card) => {
@@ -239,9 +157,7 @@ const handleLikeCard = (id, card) => {
                 card.likeCard()
 
             })
-            .catch((err) => {
-                console.log(err);
-            })
+            .catch(console.error)
 
     } else {
         api.setLikeCard(id)
@@ -250,8 +166,92 @@ const handleLikeCard = (id, card) => {
                 card.likes = res.likes;
                 card.likeCard();
             })
-            .catch((err) => {
-                console.log(err);
-            })
+            .catch(console.error)
     }
 }
+
+
+// Навешиваем слушатели на кнопку создания пользовательской карточки
+buttonAddCard.addEventListener('click', () => {
+    cardPopup.open();
+    formValidators['edit-card'].disableSbmButton();
+    formValidators['edit-card'].resetErrors();
+    focusOnIput(cardAddPopupImgHeadingInput);
+});
+
+// можно сделать универсальную функцию, которая принимает функцию запроса,  экземпляр попапа и текст во время загрузки (опционально)
+function handleSubmit(request, popupInstance, loadingText = "Сохранение...") {
+
+    // изменяем текст кнопки до вызова запроса
+    popupInstance.renderLoading(true, loadingText);
+    request()
+      .then(() => {
+        // закрывать попап нужно только в `then`
+        popupInstance.close()
+      })
+      .catch((err) => {
+        // в каждом запросе нужно ловить ошибку
+        console.error(`Ошибка: ${err}`);
+      })
+      // в каждом запросе в `finally` нужно возвращать обратно начальный текст кнопки
+      .finally(() => {
+        popupInstance.renderLoading(false);
+      });
+  }
+  
+  // пример оптимизации обработчика сабмита формы профиля
+  function handleProfileFormSubmit(inputValues) {
+    // создаем функцию, которая возвращает промис, так как любой запрос возвращает его 
+    function makeRequest() {
+      // `return` позволяет потом дальше продолжать цепочку `then, catch, finally`
+      return api.editingProfile(inputValues).then((userData) => {
+        
+        userInformation.setUserInfo(userData)
+      });
+    }
+    // вызываем универсальную функцию, передавая в нее запрос, экземпляр попапа и текст изменения кнопки (если нужен другой, а не `"Сохранение..."`)
+    handleSubmit(makeRequest, profilePopup);
+  }
+
+  //Функция колбэк для смены аватара
+function handleEditAvatar(obj) {
+    // editAvatarPopup.submitButton.textContent = "Сохранение..."
+    function makeRequest() {
+        return api.setAvatar(obj.link)
+        .then(
+            userInformation.setUserAvatar(obj.link),
+        )
+    }
+    handleSubmit(makeRequest, editAvatarPopup);
+}
+
+// Функция обработчик отправки формы cardPopup
+function createUserCard(obj) {
+    // cardPopup.submitButton.textContent = "Сохранение..."
+    function makeRequest() {
+        return api.setUserCard(obj.name, obj.link)
+        .then(obj => {
+            createCard(obj, cardList, userId)
+        })
+        
+    }
+    handleSubmit(makeRequest, cardPopup, 'Создать');
+};
+
+//Функция колбэк для удаления карточки
+const handleDeleteCard = (id, card) => {
+    deletePopup.open();
+    deletePopup.setConfirmAction(() => {
+        if (card.userId === card.ownerId) {
+            api.deleteCard(id)
+                .then(() => {
+                    deletePopup.close();
+                    card.delete();
+                })
+                .catch(console.error)
+        }
+    })
+}
+
+
+

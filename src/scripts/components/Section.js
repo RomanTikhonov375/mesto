@@ -11,13 +11,8 @@ export class Section {
     }
 
     // Публичный метод отрисовки всех элементов, с помощью функции renderer
-    renderItems(obj, userId, ownerId) {
-        // Проверка если передаваемый элемент массив, то делаем перебор, иначе просто добавляем элемент. 
-        if (Array.isArray(obj)) {
-            obj.forEach(item => {
-                this._renderer(item, userId, ownerId);
-            });
-        } else this._renderer(obj);
+    renderItems(items, userId, ownerId) {
+        this._renderer(items, userId, ownerId);
 
     }
 }

@@ -22,8 +22,8 @@ export class UserInfo {
     };
 
     //Метод для установки данных пользователя на страницы
-    setUserAvatar(obj){
-        this._userAvatar.style.backgroundImage = `url(${obj["avatar"]})`
+    setUserAvatar(link){
+        this._userAvatar.style.backgroundImage = `url(${link})`
     }
 
 }

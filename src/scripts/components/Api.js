@@ -1,3 +1,4 @@
+
 export class Api {
     constructor({ baseUrl, headers }) {
         this.baseUrl = baseUrl;
@@ -14,104 +15,84 @@ export class Api {
         }
     }
 
+    //Функция создания запроса
+    _request(url, options) {
+        return fetch(`${this.baseUrl}` + `${url}`, options).then(this._checkResponse)
+
+    }
+
     //Метод для запроса карточек с сервера
     getInitialCards() {
-        return fetch(`${this.baseUrl}/cards`, {
+        return this._request(`/cards`, {
             headers: this.headers
         })
-            .then(this._checkResponse)
-            .then((result) => {
-                return result;
-            });
-
     }
 
     //Метод для запроса текущего пользователя с сервера
     getUserInfo() {
-        return fetch(`${this.baseUrl}/users/me`, {
+        return this._request(`/users/me`, {
             headers: this.headers
         })
-            .then(this._checkResponse)
-            .then((result) => {
-                return result;
-            });
-
-
     }
 
     //Метод для обновления данных пользователя на сервере
-    editingProfile(x, y) {
-        return fetch(`${this.baseUrl}/users/me`, {
-            method: 'PATCH',
+    editingProfile(inputValues) {
+        return this._request(`/users/me`, {
             headers: this.headers,
+            method: 'PATCH',
             body: JSON.stringify({
-                name: x,
-                about: y
+                name: inputValues.name,
+                about: inputValues.about
             })
         })
-            .then(this._checkResponse)
-            .then((result) => {
-                return result;
-            })
-    }
+        }
 
     //Метод для добавления карточки пользователя на сервер
     setUserCard(x, y) {
-        return fetch(`${this.baseUrl}/cards`, {
-            method: 'POST',
+        return this._request(`/cards`, {
             headers: this.headers,
-            body: JSON.stringify({
-                name: x,
-                link: y
-            })
+            method: 'POST',
+                headers: this.headers,
+                body: JSON.stringify({
+                    name: x,
+                    link: y
+                })
         })
-            .then(this._checkResponse)
-            .then((result) => {
-                return result;
-            })
-    }
+        }
 
     //Метод для удаления карточки пользователя с сервера
     deleteCard(id) {
-        return fetch(`${this.baseUrl}/cards/${id}/`, {
-            method: 'DELETE',
+        return this._request(`/cards/${id}/`, {
             headers: this.headers,
+            method: 'DELETE',
         })
-            .then(this._checkResponse)
-    }
+        }
 
     //Метод для добавления лайка пользователя на сервер
     setLikeCard(id) {
-        return fetch(`${this.baseUrl}/cards/${id}/likes`, {
-            method: 'PUT',
+        return this._request(`/cards/${id}/likes`, {
             headers: this.headers,
+            method: 'PUT',
         })
-            .then(this._checkResponse)
-
-    }
+        }
 
     //Метод для удаления лайка пользователя с сервера
     removeLikeCard(id) {
-        return fetch(`${this.baseUrl}/cards/${id}/likes`, {
+        return this._request(`/cards/${id}/likes`, {
+            headers: this.headers,
             method: 'DELETE',
-            headers: this.headers,
         })
-            .then(this._checkResponse)
-    }
+        }
 
-      //Метод для изменения аватара пользователя на сервере
+    //Метод для изменения аватара пользователя на сервере
     setAvatar(url) {
-        return fetch(`${this.baseUrl}/users/me/avatar`, {
-            method: 'PATCH',
+        return this._request(`/users/me/avatar`, {
             headers: this.headers,
+            method: 'PATCH',
             body: JSON.stringify({
                 avatar: url
             })
         })
-            .then(this._checkResponse)
-            .then((result) => {
-                return result;
-            })
-    }
+        }
 
 }
