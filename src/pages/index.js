@@ -12,7 +12,7 @@ import { PopupWithConfirmButton } from '../scripts/components/PopupWithConfirmBu
 // Создание экзепляра класса Section
 const cardList = new Section({
     renderer: (item) => {
-        createCard(item, cardList);
+        createCard(item, cardList, userId);
     },
 }, '.cards-list');
 
@@ -32,14 +32,12 @@ let userId;
 // Инициализируем данные на страницы, через запрос на сервер
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([getUserInfo, getInitialCards]) => {
+        console.log(getInitialCards)
         userInformation.setUserInfo(getUserInfo);
         userInformation.setUserAvatar(getUserInfo.avatar);
         userId = getUserInfo._id;
-        getInitialCards.forEach(
-            item => {
-                createCard(item, cardList, userId)
-            }
-        )
+        cardList.renderItems(getInitialCards);
+        // Сложно было понять, если возможно объясни в комментарии , для чего это нужно было , чтобы сделать метод более универсальным?
     })
     .catch(console.error);
 
@@ -62,15 +60,15 @@ const userInformation = new UserInfo(
 // handleCardClick: Функция для передачи колбэка, для открытия imagePopup
 // handleDeleteCard: Функция для передачи колбэка, для открытия удаления карточки
 // handleLikeCard: Функция для передачи колбэка, для открытия лайка карточки
-function getCard(item, userId) {
+function getCard(item) {
     const card = new Card(item, ".cards-list-container", handleCardClick, userId, handleDeleteCard, handleLikeCard);
     return card.getView();
 
 };
 
 // Функция создания карточки
-function createCard(item, cardlist, userId) {
-    const cardElement = getCard(item, userId);
+function createCard(item, cardlist) {
+    const cardElement = getCard(item);
     cardlist.addItem(cardElement);
 }
 
@@ -78,9 +76,11 @@ function createCard(item, cardlist, userId) {
 // Функция добавления в инпуты информации со страницы
 function editProfileFormAddDefaultInputs() {
     const userInformationData = userInformation.getUserInfo();
-    formEditProfile['user-name'].value = userInformationData.userName;
-    formEditProfile['user-career'].value = userInformationData.userCareer;
-};
+    profilePopup.setInputValues({
+        name: userInformationData.userName,
+        about: userInformationData.userCareer
+    })
+}; 
 
 
 // Навешиваем слушатели на кнопку создания смены аватара
@@ -99,12 +99,7 @@ editButton.addEventListener('click', () => {
 });
 
 // Функция добавления фокуса на инпут.
-function focusOnIput(item) {
-    setTimeout(() => {
-        item.focus();
-    }, 100
-    );
-};
+
 
 // Функция открытия попапа с картинкой, для передачи в конструктор
 function handleCardClick(name, link) {
@@ -176,7 +171,6 @@ buttonAddCard.addEventListener('click', () => {
     cardPopup.open();
     formValidators['edit-card'].disableSbmButton();
     formValidators['edit-card'].resetErrors();
-    focusOnIput(cardAddPopupImgHeadingInput);
 });
 
 // можно сделать универсальную функцию, которая принимает функцию запроса,  экземпляр попапа и текст во время загрузки (опционально)
@@ -235,7 +229,7 @@ function createUserCard(obj) {
         })
         
     }
-    handleSubmit(makeRequest, cardPopup, 'Создать');
+    handleSubmit(makeRequest, cardPopup, 'Создание...');
 };
 
 //Функция колбэк для удаления карточки

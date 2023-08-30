@@ -11,8 +11,11 @@ export class Section {
     }
 
     // Публичный метод отрисовки всех элементов, с помощью функции renderer
-    renderItems(items, userId, ownerId) {
-        this._renderer(items, userId, ownerId);
+    renderItems(items) {
+        items.forEach(item => {
+            this._renderer(item);
+        });
+        
 
     }
 }

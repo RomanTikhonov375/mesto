@@ -10,17 +10,13 @@ export class PopupWithForm extends Popup {
         this._submitBtnText = this.submitButton.textContent;
     }
 
-    // setInputValues(data) {
-    //     this._inputList.forEach((input) => {
-    //         console.log(data[input.name])
-    //       // тут вставляем в `value` инпута данные из объекта по атрибуту `name` этого инпута
-    //       input.value = data[input.name];
-    //     });
-    //   }
+    setInputValues(data) {
+        this._inputList.forEach((input) => {
+          input.value = data[input.name];
+        });
+      }
 
-    // Я не смог разобраться , какие данные в дату надо подставить , если не сложно напиши по подробнее, и последнее можно лучше тоже не понял, где это использовать
-
-    //Метод для получения данных из инпутов форм
+    // Спасибо большое за объяснение теперь всё ясно :) 
     _getInputValues() {
         this._formValues = {};
         this._inputList.forEach(input => {
@@ -51,5 +47,17 @@ export class PopupWithForm extends Popup {
         } else {
             this.submitButton.textContent = this._submitBtnText;
         }
+    }
+
+    _focusOnIput() {
+        setTimeout(() => {
+            this._inputList[0].focus();
+        }, 100
+        );
+    };
+
+    open() {
+        super.open();
+        this._focusOnIput();
     }
 }

@@ -52,6 +52,7 @@ export class Card {
 
     // Метод удаления карточки
     _deleteCardPopup() {
+       
         this._deleteCard(this.cardId, this);
     }
 
