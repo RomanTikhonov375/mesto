@@ -32,12 +32,10 @@ let userId;
 // Инициализируем данные на страницы, через запрос на сервер
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([getUserInfo, getInitialCards]) => {
-        console.log(getInitialCards)
         userInformation.setUserInfo(getUserInfo);
         userInformation.setUserAvatar(getUserInfo.avatar);
         userId = getUserInfo._id;
         cardList.renderItems(getInitialCards);
-        // Сложно было понять, если возможно объясни в комментарии , для чего это нужно было , чтобы сделать метод более универсальным?
     })
     .catch(console.error);
 
@@ -79,7 +77,7 @@ function editProfileFormAddDefaultInputs() {
     profilePopup.setInputValues({
         name: userInformationData.userName,
         about: userInformationData.userCareer
-    })
+    });
 }; 
 
 
@@ -96,10 +94,8 @@ editButton.addEventListener('click', () => {
     profilePopup.open();
      editProfileFormAddDefaultInputs();
     formValidators['edit-profile'].disableSbmButton();
+    formValidators['edit-profile'].resetErrors(); 
 });
-
-// Функция добавления фокуса на инпут.
-
 
 // Функция открытия попапа с картинкой, для передачи в конструктор
 function handleCardClick(name, link) {
@@ -108,15 +104,15 @@ function handleCardClick(name, link) {
 imagePopup.setEventListeners();
 
 
-const formValidators = {}
+const formValidators = {};
 
 // Включение валидации
 const enableValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector))
     formList.forEach((formElement) => {
-        const validator = new FormValidator(config, formElement)
+        const validator = new FormValidator(config, formElement);
         // получаем данные из атрибута `name` у формы
-        const formName = formElement.getAttribute('name')
+        const formName = formElement.getAttribute('name');
         // вот тут в объект записываем под именем формы
         formValidators[formName] = validator;
         validator.enableValidation();
@@ -143,16 +139,16 @@ deletePopup.setEventListeners();
 //Функция колбэк для лайка карточки
 const handleLikeCard = (id, card) => {
     if (card.likes.some(like => {
-        return like._id === userId
+        return like._id === userId;
     })) {
         api.removeLikeCard(id)
             .then(res => {
                 card.setLikeCounter(res.likes);
                 card.likes = res.likes;
-                card.likeCard()
+                card.likeCard();
 
             })
-            .catch(console.error)
+            .catch(console.error);
 
     } else {
         api.setLikeCard(id)
@@ -161,7 +157,7 @@ const handleLikeCard = (id, card) => {
                 card.likes = res.likes;
                 card.likeCard();
             })
-            .catch(console.error)
+            .catch(console.error);
     }
 }
 
@@ -200,7 +196,7 @@ function handleSubmit(request, popupInstance, loadingText = "Сохранени�
       // `return` позволяет потом дальше продолжать цепочку `then, catch, finally`
       return api.editingProfile(inputValues).then((userData) => {
         
-        userInformation.setUserInfo(userData)
+        userInformation.setUserInfo(userData);
       });
     }
     // вызываем универсальную функцию, передавая в нее запрос, экземпляр попапа и текст изменения кнопки (если нужен другой, а не `"Сохранение..."`)
@@ -213,7 +209,9 @@ function handleEditAvatar(obj) {
     function makeRequest() {
         return api.setAvatar(obj.link)
         .then(
-            userInformation.setUserAvatar(obj.link),
+            () => {
+                userInformation.setUserAvatar(obj.link);
+            },
         )
     }
     handleSubmit(makeRequest, editAvatarPopup);
@@ -242,7 +240,7 @@ const handleDeleteCard = (id, card) => {
                     deletePopup.close();
                     card.delete();
                 })
-                .catch(console.error)
+                .catch(console.error);
         }
     })
 }
